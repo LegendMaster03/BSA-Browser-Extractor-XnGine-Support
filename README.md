@@ -1,5 +1,20 @@
 ## BSA Browser
 
+### XnGine support in this fork
+
+This repository is a fork of [AlexxEG/BSA_Browser](https://github.com/AlexxEG/BSA_Browser). The upstream application, general archive browser, and original credits remain those of the upstream project. The fork adds an XnGine archive reader to the existing archive listing and extraction infrastructure; it is not a separate BSA Browser implementation.
+
+The additions include:
+
+- Recognition of XnGine-style `.bsa`, `.snd`, and `.sav` record archives in the existing GUI and CLI archive-opening paths.
+- Parsing of footer-based name and numeric record indices, with a fallback for legacy headerless `.bsa` name indices.
+- A dedicated `XNGBSAFileEntry` that exposes archive record offsets, sizes, compression status, and record IDs.
+- Battlespire-style LZSS decompression for records marked compressed.
+
+The parser checks record sizes and that the indexed data exactly occupies the region before the footer. This is format parsing, not proof of compatibility with every XnGine title or archive variant. Compressed records are currently decompressed in memory, and the decoder's treatment of truncated input warrants additional validation before relying on it for untrusted archives.
+
+The implementation is primarily in `Sharp.BSA.BA2/BSAUtil/BSA.cs`, `Sharp.BSA.BA2/BSAUtil/XNGBSAFileEntry.cs`, and `Sharp.BSA.BA2/Utils/CompressionUtils.cs`. The original upstream build requirements and credits follow.
+
 ### Introduction
 BSA Browser is a Bethesda Archive browser & extractor application for Windows. Games that are supported includes the Fallout series and Elder Scrolls series (except Elder Scrolls Online).
 

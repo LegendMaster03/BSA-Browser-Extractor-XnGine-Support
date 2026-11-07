@@ -40,6 +40,9 @@ namespace SharpBSABA2.BSAUtil
                    $"Record ID:\t {RecordId}";
         }
 
+        // Uncompressed entries are streamed directly. Compressed entries use
+        // the legacy LZSS decoder and currently buffer the result in memory;
+        // this path does not enforce a decompressed-size limit.
         protected override void WriteDataToStream(Stream stream, SharedExtractParams extractParams, bool decompress = true)
         {
             var reader = extractParams.Reader;

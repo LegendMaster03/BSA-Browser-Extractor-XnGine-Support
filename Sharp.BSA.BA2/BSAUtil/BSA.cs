@@ -315,6 +315,9 @@ namespace SharpBSABA2.BSAUtil
             }
         }
 
+        // XnGine indexes are stored at the end of the archive, unlike the
+        // later Bethesda BSA headers. Only the expected file extensions are
+        // candidates; validation must succeed before changing archive state.
         private bool TryOpenXnGineBsa(string filePath)
         {
             string extension = Path.GetExtension(filePath);
@@ -403,6 +406,9 @@ namespace SharpBSABA2.BSAUtil
                 descriptors.Add(descriptor);
             }
 
+            // Record offsets are implicit: stored sizes describe consecutive
+            // data blocks before the footer. Reject gaps or overflow rather
+            // than exposing entries that extend into index metadata.
             long recordOffset = dataStartOffset;
             var parsedEntries = new List<XNGBSAFileEntry>(recordCount);
 
