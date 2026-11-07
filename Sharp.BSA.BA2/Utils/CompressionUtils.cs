@@ -77,6 +77,11 @@ namespace SharpBSABA2.Utils
             progressReport?.Invoke((ulong)written);
         }
 
+        // LZSS uses a 4 KiB rolling dictionary, initially filled with spaces
+        // up to position 4078. A set marker bit emits a literal; a clear bit
+        // copies a 3-18-byte back-reference, including overlapping copies.
+        // Truncated tokens currently return the partial output; callers must
+        // not interpret this decoder as an integrity or size check.
         public static byte[] DecompressBattlespireLzss(byte[] input)
         {
             byte[] window = new byte[4096];
